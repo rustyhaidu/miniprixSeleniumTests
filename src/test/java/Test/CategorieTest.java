@@ -16,28 +16,52 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class CategorieTest {
+public class CategorieTest extends BaseTest {
 
-    public WebDriver driver;
+    /**
+     * Steps:
+     * 1. Login
+     * 2. Click on "Femei" link/button
+     * 3. Click on "Genti"
+     * 4. Hover over the 3rd article
+     * 5. Click on "Pune In Cos" (Pop-up window is displayed)
+     * 6. Choose size ("Unica")
+     * 7. Click on "Pune in Cos" again
+     * 8. Close the windows that are automatically opened
+     * 9. Click on "Barbati"
+     * 10. Click on Pantofi ("Pune In Cos" - like before from 4. to 6.
+     * 11. Select size 44
+     * 12. Close pop-up and check on the right that there are two products
+     * 13. Remove products from cart
+     * 14. Check that there 0 products in cart
+     */
 
     @Test
-    public void CategorieTest() {
+    public void CategorieTest() throws InterruptedException {
+        // 1.
+        performDefaultLogin();
 
-        System.setProperty("webdriver.chrome.driver", "C:\\Automation\\chromedriver_win32\\chromedriver.exe");
-        ChromeDriver driver = new ChromeDriver();
-        driver.get("https://www.miniprix.ro/");
-        driver.manage().window().maximize();
+        // 2.
+        new WebDriverWait(driver, 10).until(ExpectedConditions
+                .visibilityOfElementLocated(By.xpath("//div[contains(text(), 'FEMEI')]")));
+        WebElement femeiLinkButton = driver.findElement(By.xpath("//div[contains(text(), 'FEMEI')]"));
+        femeiLinkButton.click();
 
+        // 3.
+        new WebDriverWait(driver, 10).until(ExpectedConditions
+                .visibilityOfElementLocated(By.xpath("//p[contains(text(), 'GENTI')]")));
+        WebElement gentiButton = driver.findElement(By.xpath("//p[contains(text(), 'GENTI')]"));
+        gentiButton.click();
 
-        List<WebElement> Gender = driver.findElements(By.xpath("//ul[@class='vtex-menu-2-x-menuContainer vtex-menu-2-x-menuContainer--MPX-main-menu list flex pl0 mv0 flex-row']"));
-        for (int index = 0; index < Gender.size(); index++) {
-            String currentElement = Gender.get(index).getText();
-            if (currentElement.equals("Jeans"))
-            {
-                Gender.get(index).click();
-            }
-        }
-
+        // 4.
+        Thread.sleep(2000);
+        List<WebElement> listOfPurses = driver.findElements(By.xpath("//article"));
+        WebElement elementulDorit = listOfPurses.get(2);
+        Actions action = new Actions(driver);
+        action.moveToElement(elementulDorit).build().perform();
+        Thread.sleep(1000);
+        WebElement buttonPuneInCos = driver.findElement(By.xpath("//p[contains(text(), 'PUNE IN COS')]"));
+        action.moveToElement(buttonPuneInCos).click().build().perform();
 
     }
 }

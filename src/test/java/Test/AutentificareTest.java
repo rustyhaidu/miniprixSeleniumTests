@@ -18,25 +18,18 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class AutentificareTest {
+public class AutentificareTest extends BaseTest {
 
-    public static WebDriver driver;
-    public TestSteps testSteps = new TestSteps();
-
-    @BeforeClass
-    public static void initDriver() {
-        //System.setProperty("webdriver.chrome.driver", "C:\\Automation\\chromedriver_win32\\chromedriver.exe");
-        System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver");
-        driver = new ChromeDriver();
-        driver.get("https://www.miniprix.ro/");
-        driver.manage().window().maximize();
-    }
+    /**
+     * Steps:
+     * 1. Login with valid username and password
+     * 2. Check welcome text to be "Salut," + email address"
+     */
 
     @Test
-    public void AutentificareTest() {
+    public void autentificareTest() {
         String welcomeText = testSteps.login(driver, "lucianaaus@yahoo.com", "Anastasia@21");
         Assert.assertEquals("SALUT, LUCIANAAUS@YAHOO.COM", welcomeText);
     }
-
 }
 
